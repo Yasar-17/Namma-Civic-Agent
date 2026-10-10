@@ -1,23 +1,21 @@
-# CivicLens
+# Namma-Civic-Agent
 
 Bringing clarity to public services for everyone.
 
-CivicLens is a chat-based platform that helps people find answers about government schemes, public services, and civic processes. Instead of digging through government websites, you can just ask questions in plain English and get clear answers.
+Namma-Civic-Agent is a chat-based platform that helps people find answers about government schemes, public services, and civic processes. Instead of digging through government websites, you can just ask questions in plain English and get clear answers.
 
 ---
 
 ## Overview
 
-**Try it now:** [https://tryciviclens.vercel.app](https://tryciviclens.vercel.app)
-
-<img width="729" height="459" alt="CivicLens overview" src="https://github.com/user-attachments/assets/74d21102-951d-4b4f-ad86-f01a32496873" />
+<img width="729" height="459" alt="Namma-Civic-Agent overview" src="https://github.com/user-attachments/assets/74d21102-951d-4b4f-ad86-f01a32496873" />
 
 ---
 
 ## What it does
 
 **Chat interface with streaming responses**
-Ask questions about government schemes, eligibility, or how to apply for benefits. Responses stream in real-time using OpenAI's API. Works for multiple countries including India, USA, UK, Canada, and Australia.
+Ask questions about government schemes, eligibility, or how to apply for benefits. Responses stream in real-time using OpenRouter. Works for multiple countries including India, USA, UK, Canada, and Australia.
 
 **File uploads**
 Upload PDFs or documents related to government schemes, and the system extracts relevant information to help answer your questions.
@@ -29,7 +27,7 @@ Automatically extracts entities (schemes, offices, documents) from your question
 Automated workflows that can crawl government portals, extract eligibility rules from PDFs, and generate autocomplete suggestions. These run via webhooks that integrate with the main app.
 
 **Oumi fine-tuning**
-Custom dataset with 12 civic Q&A examples covering multiple countries. Can be used to fine-tune a model for better civic-specific responses, though it's optional and the app works fine with standard OpenAI models.
+Custom dataset with 12 civic Q&A examples covering multiple countries. Can be used to fine-tune a model for better civic-specific responses, though it's optional and the app works fine with models available through OpenRouter.
 
 ---
 
@@ -37,8 +35,8 @@ Custom dataset with 12 civic Q&A examples covering multiple countries. Can be us
 
 * **Next.js 16** - React framework
 * **MongoDB** - Database (via Prisma)
-* **Clerk** - Authentication
-* **OpenAI** - AI chat responses (GPT-3.5-turbo)
+* **Local guest profile** - Authentication is currently disabled; local users share a guest profile
+* **OpenRouter** - AI chat responses (GPT-4o mini through OpenRouter)
 * **Kestra** - Workflow automation
 * **Oumi** - Model fine-tuning (optional)
 * **TailwindCSS + shadcn/ui** - UI components
@@ -48,9 +46,9 @@ Custom dataset with 12 civic Q&A examples covering multiple countries. Can be us
 
 ## Sponsor integrations
 
-### OpenAI
+### OpenRouter
 
-The main AI engine. Handles streaming chat responses, query classification, entity extraction, and document generation (RTI/FOIA requests, complaint letters, eligibility summaries). Code is in `lib/ai/` and `app/api/ai/`.
+The AI gateway. Handles streaming chat responses, query classification, entity extraction, and document generation (RTI/FOIA requests, complaint letters, eligibility summaries). The app uses OpenRouter's API and the `openai/gpt-4o-mini` model. Code is in `lib/ai/` and `app/api/ai/`.
 
 ### Kestra
 
@@ -64,7 +62,7 @@ Workflows are in `kestra/workflows/` and integrate via webhook endpoints in `app
 
 ### Oumi
 
-Fine-tuning setup for a custom civic model. Dataset has 12 examples covering India, USA, UK, Canada, and Australia. Config is in `oumi/config.yaml`. The app can use a fine-tuned model if available, but falls back to standard OpenAI if not.
+Fine-tuning setup for a custom civic model. Dataset has 12 examples covering India, USA, UK, Canada, and Australia. Config is in `oumi/config.yaml`. The app can use a fine-tuned model if available, but falls back to OpenRouter if not.
 
 ### Cline
 
@@ -82,8 +80,7 @@ Deployed on Vercel with edge functions for low-latency responses. GitHub integra
 
 * Node.js 18+
 * MongoDB (local or Atlas)
-* OpenAI API key
-* Clerk account (for auth)
+* OpenRouter API key
 
 ### Setup
 
@@ -102,10 +99,8 @@ cp .env.example .env
 
 Required variables:
 
-* `OPENAI_API_KEY` - OpenAI API key
+* `OPENROUTER_API_KEY` - OpenRouter API key
 * `DATABASE_URL` - MongoDB connection string
-* `CLERK_SECRET_KEY` - Clerk secret key
-* `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` - Clerk public key
 * `KESTRA_URL` - Kestra instance URL (optional)
 * `KESTRA_AUTH` - Base64 encoded Kestra credentials (optional)
 
